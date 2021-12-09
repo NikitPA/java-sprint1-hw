@@ -4,27 +4,38 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        MonthlyReport monthlyReport = new MonthlyReport();
-        YearlyReport yearlyReport = new YearlyReport();
-        YearAndMonthReport yearandMonthReport = new YearAndMonthReport();
-        while (true) {
+        AllReportsMonth allReportsMonth = new AllReportsMonth();
+        InfoMonth infoMonth = new InfoMonth(allReportsMonth.splitReport());
+        AllReportsYears allReportsYears = new AllReportsYears();
+        InfoYears infoYears = new InfoYears(allReportsYears.splitReport());
+        YearAndMonthReport yearAndMonthReport = new YearAndMonthReport
+                (allReportsMonth.splitReport(), allReportsYears.splitReport());
+        boolean isExit = false;
+        while (!isExit) {
             printMenu();
             String command = scanner.nextLine();
-            if (command.equals("1")) {
-                monthlyReport.readAllFileMonth();
-            } else if (command.equals("2")) {
-                yearlyReport.readAllFileMonth();
-            } else if (command.equals("3")) {
-                System.out.println(yearandMonthReport.checkWrite());
-            } else if (command.equals("4")) {
-                monthlyReport.getInfoMonth();
-            } else if (command.equals("5")) {
-                yearlyReport.getInfoYear();
-            } else if (command.equals("Exit")) {
-                System.out.println("Выход");
-                break;
-            } else {
-                System.out.println("Такой команды нет ");
+            switch (command) {
+                case "1":
+                    allReportsMonth.reader();
+                    break;
+                case "2":
+                    allReportsYears.reader();
+                    break;
+                case "3":
+                    System.out.println(yearAndMonthReport.checkWrite());
+                    break;
+                case "4":
+                    infoMonth.getInfoMonth();
+                    break;
+                case "5":
+                    infoYears.getInfoYear();
+                    break;
+                case "Exit":
+                    isExit = true;
+                    System.out.println("Выход");
+                    break;
+                default:
+                    System.out.println("Такой команды нет ");
             }
         }
     }
