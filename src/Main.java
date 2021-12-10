@@ -4,31 +4,26 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        AllReportsMonth allReportsMonth = new AllReportsMonth();
-        InfoMonth infoMonth = new InfoMonth(allReportsMonth.splitReport());
-        AllReportsYears allReportsYears = new AllReportsYears();
-        InfoYears infoYears = new InfoYears(allReportsYears.splitReport());
-        YearAndMonthReport yearAndMonthReport = new YearAndMonthReport
-                (allReportsMonth.splitReport(), allReportsYears.splitReport());
+        ReportManager reportManager = new ReportManager();
         boolean isExit = false;
         while (!isExit) {
             printMenu();
             String command = scanner.nextLine();
             switch (command) {
                 case "1":
-                    allReportsMonth.reader();
+                    reportManager.outputMontlyReport();
                     break;
                 case "2":
-                    allReportsYears.reader();
+                    reportManager.outputYearsReport();
                     break;
                 case "3":
-                    System.out.println(yearAndMonthReport.checkWrite());
+                    System.out.println(reportManager.checkWrite());
                     break;
                 case "4":
-                    infoMonth.getInfoMonth();
+                    reportManager.getInfoMonth();
                     break;
                 case "5":
-                    infoYears.getInfoYear();
+                    reportManager.getInfoYears();
                     break;
                 case "Exit":
                     isExit = true;
