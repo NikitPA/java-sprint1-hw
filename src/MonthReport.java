@@ -1,16 +1,16 @@
 import java.util.HashMap;
 
 public class MonthReport {
-    String year;
-    String month;
+    int year;
+    int month;
     boolean isFilled;
     HashMap<String, Integer> profit;
     HashMap<String, Integer> expense;
 
-    MonthReport(String year, String month, boolean isFilled) {
+    MonthReport(int year, int month) {
         this.year = year;
         this.month = month;
-        isFilled = false;
+        this.isFilled = false;
     }
 
     public HashMap<String, Integer> fillingProfitReportMonth(String[] lines) {
@@ -33,42 +33,24 @@ public class MonthReport {
         return expense;
     }
 
-    public String getMaxProfAndExpMonth(HashMap<String, Integer> profExp) {
-        int sumMonth = 0;
+    public String getProductMaxPrice(HashMap<String, Integer> pricelist) {
+        int maxPrice = 0;
         String nameProduct = "";
-        for (String product : profExp.keySet()) {
-            int volumePrice = profExp.get(product);
-            if (volumePrice > sumMonth) {
-                sumMonth = volumePrice;
+        for (String product : pricelist.keySet()) {
+            int volumePrice = pricelist.get(product);
+            if (volumePrice > maxPrice) {
+                maxPrice = volumePrice;
                 nameProduct = product;
             }
         }
-        return nameProduct + " - " + sumMonth;
+        return nameProduct + " - " + maxPrice;
     }
 
-    public String returnString(String isExpense, int month) {
-        String[] linesReport = ReportUtil.splitReportMonth().get(month);
-        if ("false".equals(isExpense)) {
-            return getMaxProfAndExpMonth(fillingProfitReportMonth(linesReport));
-        } else {
-            return getMaxProfAndExpMonth(fillingExpenseReportMonth(linesReport));
-        }
-    }
-
-    public int getExpAndProfMonth(HashMap<String, Integer> profExp) {
+    public int countSum(HashMap<String, Integer> pricelist) {
         int sumMonth = 0;
-        for (Integer volumePrice : profExp.values()) {
+        for (Integer volumePrice : pricelist.values()) {
             sumMonth += volumePrice;
         }
         return sumMonth;
-    }
-
-    public int returnValue(String isExpense, int month) {
-        String[] linesReport = ReportUtil.splitReportMonth().get(month);
-        if ("false".equals(isExpense)) {
-            return getExpAndProfMonth(fillingProfitReportMonth(linesReport));
-        } else {
-            return getExpAndProfMonth(fillingExpenseReportMonth(linesReport));
-        }
     }
 }

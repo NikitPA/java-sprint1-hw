@@ -17,13 +17,13 @@ public class Main {
                     reportManager.outputYearsReport();
                     break;
                 case "3":
-                    System.out.println(reportManager.checkWrite());
+                    reportManager.checkReports();
                     break;
                 case "4":
                     reportManager.getInfoMonth();
                     break;
                 case "5":
-                    reportManager.getInfoYears();
+
                     break;
                 case "Exit":
                     isExit = true;
