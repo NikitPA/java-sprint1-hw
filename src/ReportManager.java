@@ -1,11 +1,12 @@
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 
 public class ReportManager {
     ArrayList<MonthReport> monthReports = new ArrayList<>();
     ArrayList<String> rawMonthContent = new ArrayList<>();
-    ArrayList<MonthReport> yearReports = new ArrayList<>();
+    ArrayList<YearsReports> yearReports = new ArrayList<>();
     ArrayList<String> rawYearContent = new ArrayList<>();
+
 
     public void outputMontlyReport() {
         saveMonthReports();
@@ -16,49 +17,50 @@ public class ReportManager {
 
     public void outputYearsReport() {
         saveYearReports();
-        for (String line : rawYearContent){
+        for (String line : rawYearContent) {
             System.out.println(line);
         }
     }
 
     public void getInfoMonth() {
-
-        for (MonthReport monthReport : monthReports) {
-            System.out.println("Название месяца : " + ReportUtil.getNameOfMonth(monthReport.month));
-            System.out.println("Самый прибыльный товар: " + monthReport.getProductMaxPrice(monthReport.profit));
-            System.out.println("Cамая большая трата : " + monthReport.getProductMaxPrice(monthReport.expense));
+        for (ArrayList<MonthReport> list : getTotalMonthReport()) {
+            System.out.println("Название месяца : " + ReportUtil.getNameOfMonth(list.get(0).month));
+            System.out.println("Самый прибыльный товар: " + ReportUtil.getProductMaxProfitPrice(list));
+            System.out.println("Cамая большая трата : " + ReportUtil.getProductMaxExpensePrice(list));
         }
+    }
+    //Здравствуйте , увидел ваши ремондации, спасибо большое за них! В методе getInfoMonth и checkReports вы написали
+    // вывод , который идет по каждой строчке месяца, я создал метод который из всех строчек делает листы с месяцами
+    //и тоже самое с годами там траты и доходы идут не порядку ,поэтому пришлось создать метод, который сортирует их.
+    //И теперь я понял, что значит считать один раз за программу, еще раз спасибо вам за это:))
+
+    public void getInfoYears() {
+        System.out.println("Год : " + yearReports.get(0).year + "\nПрибыль по каждому месяцу : ");
+        ReportUtil.getMarginYear(yearReports);
+        System.out.println("Средний доход : ");
+        System.out.println(ReportUtil.getProfitYear(yearReports));
+        System.out.println("Средний расход : ");
+        System.out.println(ReportUtil.getExpenseYear(yearReports));
     }
 
     public String checkReports() {
         ArrayList<Boolean> check = new ArrayList<>();
-        for (int i = 1; i < 4; i++) {
-            if (monthReports.size() < i) {
-                return "Отчет № " + i + " не загружен";
-            }
-            check.add(monthReports.get(i - 1).countSum(monthReports.get(i - 1).profit) == 5
-                    &&
-                    monthReports.get(i - 1).countSum(monthReports.get(i - 1).expense) == 5);
+        int i = 1;
+        for(ArrayList<MonthReport> list : getTotalMonthReport()) {
+            check.add(ReportUtil.countSumProfit(list) == getYearReports("false").get(i - 1).get("0" + i) &&
+                    ReportUtil.countSumExpense(list) == getYearReports("true").get(i - 1).get("0" + i));
+            i++;
         }
         if (!check.get(0)) {
-            return "01 - Январь";
+            return ReportUtil.getNameOfMonth(getTotalMonthReport().get(0).get(0).month);
         } else if (!check.get(1)) {
-            return "02 - Февраль";
+            return ReportUtil.getNameOfMonth(getTotalMonthReport().get(1).get(1).month);
         } else if (!check.get(2)) {
-            return "03 - Март";
+            return ReportUtil.getNameOfMonth(getTotalMonthReport().get(2).get(2).month);
         } else {
             return "Ошибок в операции не обнаружено, сверка данных прошла успешна";
         }
     }
-
-    /*public void getInfoYears() {
-        System.out.println("Год : " + saveYear().get(0).year + "\nПрибыль по каждому месяцу : ");
-        saveYear().get(0).getProfitExpYear();
-        System.out.println("Средний доход : ");
-        System.out.println(saveYear().get(0).getProfitYear());
-        System.out.println("Средний расход : ");
-        System.out.println(saveYear().get(0).getExpenseYear());
-    }*/
 
     public void saveMonthReports() {
         for (int i = 1; i < 4; i++) {
@@ -91,11 +93,45 @@ public class ReportManager {
             for (int j = 1; j < lines.length; j++) {
                 String line = lines[j];
                 String[] lineContents = line.split(",");
-                YearsReports yearsReports = new YearsReports(2021);
-                yearsReports.fillingExpenseReportYear(lineContents);
-                yearsReports.fillingProfitReportYear(lineContents);
-                yearsReports.isFilled = true;
+                YearsReports yearsReport = new YearsReports(2021);
+                yearsReport.fillingExpenseReportYear(lineContents);
+                yearsReport.fillingProfitReportYear(lineContents);
+                yearsReport.isFilled = true;
+                yearReports.add(yearsReport);
             }
         }
+    }
+
+    public ArrayList<HashMap<String, Integer>> getYearReports(String isExpense){
+        ArrayList<HashMap<String, Integer>> reportYear = new ArrayList<>();
+        for (int i = 0; i < yearReports.size(); i++) {
+            if ("false".equals(isExpense)) {
+                reportYear.add(yearReports.get(i).profit);
+            } else {
+                reportYear.add(yearReports.get(i).expense);
+            }
+        }
+        for (int i = 0; i < reportYear.size(); i++) {
+            if (reportYear.get(i).isEmpty()){
+                reportYear.remove(i);
+                i--;
+            }
+        }
+        return reportYear;
+    }
+
+    public ArrayList<ArrayList<MonthReport>> getTotalMonthReport() {
+        ArrayList<MonthReport> listPartMonth;
+        ArrayList<ArrayList<MonthReport>> totalMonthReport = new ArrayList<>();
+        for (int i = 1; i < 4; i++) {
+            listPartMonth = new ArrayList<>();
+            for (MonthReport monthReport : monthReports) {
+                if (monthReport.month == i) {
+                    listPartMonth.add(monthReport);
+                }
+            }
+            totalMonthReport.add(listPartMonth);
+        }
+        return totalMonthReport;
     }
 }

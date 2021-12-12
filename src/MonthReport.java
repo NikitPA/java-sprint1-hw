@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MonthReport {
@@ -15,42 +16,15 @@ public class MonthReport {
 
     public HashMap<String, Integer> fillingProfitReportMonth(String[] lines) {
         profit = new HashMap<>();
-        for (int i = 4; i < lines.length; i = i + 4) {
-            if ("FALSE".equals(lines[i + 1]))
-                profit.put(lines[i], (Integer.valueOf(lines[i + 2]) * Integer.valueOf(lines[i + 3])));
-        }
-        isFilled = true;
-        return profit;
+            if ("FALSE".equals(lines[1]))
+                profit.put(lines[0], (Integer.valueOf(lines[2]) * Integer.valueOf(lines[3])));
+            return profit;
     }
 
     public HashMap<String, Integer> fillingExpenseReportMonth(String[] lines) {
         expense = new HashMap<>();
-        for (int i = 4; i < lines.length; i = i + 4) {
-            if ("TRUE".equals(lines[i + 1]))
-                expense.put(lines[i], (Integer.valueOf(lines[i + 2]) * Integer.valueOf(lines[i + 3])));
-        }
-        isFilled = true;
+            if ("TRUE".equals(lines[1]))
+                expense.put(lines[0], (Integer.valueOf(lines[2]) * Integer.valueOf(lines[3])));
         return expense;
-    }
-
-    public String getProductMaxPrice(HashMap<String, Integer> pricelist) {
-        int maxPrice = 0;
-        String nameProduct = "";
-        for (String product : pricelist.keySet()) {
-            int volumePrice = pricelist.get(product);
-            if (volumePrice > maxPrice) {
-                maxPrice = volumePrice;
-                nameProduct = product;
-            }
-        }
-        return nameProduct + " - " + maxPrice;
-    }
-
-    public int countSum(HashMap<String, Integer> pricelist) {
-        int sumMonth = 0;
-        for (Integer volumePrice : pricelist.values()) {
-            sumMonth += volumePrice;
-        }
-        return sumMonth;
     }
 }
