@@ -8,7 +8,7 @@ public class ReportManager {
     ArrayList<String> rawYearContent = new ArrayList<>();
 
 
-    public void outputMontlyReport() {
+    public void outputMonthlyReport() {
         saveMonthReports();
         for (String line : rawMonthContent) {
             System.out.println(line);
@@ -23,18 +23,22 @@ public class ReportManager {
     }
 
     public void getInfoMonth() {
+        if (monthReports.isEmpty()) {
+            System.out.println("Месячный отчёт не найден, необходимо считать - команда 1.");
+            return;
+        }
         for (ArrayList<MonthReport> list : getTotalMonthReport()) {
             System.out.println("Название месяца : " + ReportUtil.getNameOfMonth(list.get(0).month));
             System.out.println("Самый прибыльный товар: " + ReportUtil.getProductMaxProfitPrice(list));
             System.out.println("Cамая большая трата : " + ReportUtil.getProductMaxExpensePrice(list));
         }
     }
-    //Здравствуйте , увидел ваши ремондации, спасибо большое за них! В методе getInfoMonth и checkReports вы написали
-    // вывод , который идет по каждой строчке месяца, я создал метод который из всех строчек делает листы с месяцами
-    //и тоже самое с годами там траты и доходы идут не порядку ,поэтому пришлось создать метод, который сортирует их.
-    //И теперь я понял, что значит считать один раз за программу, еще раз спасибо вам за это:))
 
     public void getInfoYears() {
+        if (yearReports.isEmpty()) {
+            System.out.println("Годовой отчёт не найден, необходимо считать - команда 2.");
+            return;
+        }
         System.out.println("Год : " + yearReports.get(0).year + "\nПрибыль по каждому месяцу : ");
         ReportUtil.getMarginYear(yearReports);
         System.out.println("Средний доход : ");
@@ -44,19 +48,24 @@ public class ReportManager {
     }
 
     public String checkReports() {
+        if (yearReports.isEmpty() || monthReports.isEmpty()) {
+            return "Годовой или Месячный отчёт не найдены, необходимо считать - команда 2 для годового и команда 1 для "
+                    + "месячного.";
+        }
         ArrayList<Boolean> check = new ArrayList<>();
+        ArrayList<ArrayList<MonthReport>> totalMonthReport = getTotalMonthReport();
         int i = 1;
-        for(ArrayList<MonthReport> list : getTotalMonthReport()) {
+        for (ArrayList<MonthReport> list : totalMonthReport) {
             check.add(ReportUtil.countSumProfit(list) == getYearReports("false").get(i - 1).get("0" + i) &&
                     ReportUtil.countSumExpense(list) == getYearReports("true").get(i - 1).get("0" + i));
             i++;
         }
         if (!check.get(0)) {
-            return ReportUtil.getNameOfMonth(getTotalMonthReport().get(0).get(0).month);
+            return ReportUtil.getNameOfMonth(totalMonthReport.get(0).get(0).month);
         } else if (!check.get(1)) {
-            return ReportUtil.getNameOfMonth(getTotalMonthReport().get(1).get(1).month);
+            return ReportUtil.getNameOfMonth(totalMonthReport.get(1).get(1).month);
         } else if (!check.get(2)) {
-            return ReportUtil.getNameOfMonth(getTotalMonthReport().get(2).get(2).month);
+            return ReportUtil.getNameOfMonth(totalMonthReport.get(2).get(2).month);
         } else {
             return "Ошибок в операции не обнаружено, сверка данных прошла успешна";
         }
@@ -102,7 +111,7 @@ public class ReportManager {
         }
     }
 
-    public ArrayList<HashMap<String, Integer>> getYearReports(String isExpense){
+    public ArrayList<HashMap<String, Integer>> getYearReports(String isExpense) {
         ArrayList<HashMap<String, Integer>> reportYear = new ArrayList<>();
         for (int i = 0; i < yearReports.size(); i++) {
             if ("false".equals(isExpense)) {
@@ -112,7 +121,7 @@ public class ReportManager {
             }
         }
         for (int i = 0; i < reportYear.size(); i++) {
-            if (reportYear.get(i).isEmpty()){
+            if (reportYear.get(i).isEmpty()) {
                 reportYear.remove(i);
                 i--;
             }
@@ -130,7 +139,9 @@ public class ReportManager {
                     listPartMonth.add(monthReport);
                 }
             }
-            totalMonthReport.add(listPartMonth);
+            if (!listPartMonth.isEmpty()) {
+                totalMonthReport.add(listPartMonth);
+            }
         }
         return totalMonthReport;
     }

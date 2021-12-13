@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ReportUtil {
 
@@ -44,7 +43,7 @@ public class ReportUtil {
                     nameProduct = s;
                 }
             }
-            }
+        }
         return nameProduct + " - " + maxPrice;
     }
 
@@ -65,8 +64,8 @@ public class ReportUtil {
 
     public static int countSumProfit(ArrayList<MonthReport> priceList) {
         int sumMonth = 0;
-        for (MonthReport monthReport : priceList){
-            for (Integer volumPrice : monthReport.profit.values()){
+        for (MonthReport monthReport : priceList) {
+            for (Integer volumPrice : monthReport.profit.values()) {
                 sumMonth += volumPrice;
             }
         }
@@ -75,8 +74,8 @@ public class ReportUtil {
 
     public static int countSumExpense(ArrayList<MonthReport> priceList) {
         int sumMonth = 0;
-        for (MonthReport monthReport : priceList){
-            for (Integer volumPrice : monthReport.expense.values()){
+        for (MonthReport monthReport : priceList) {
+            for (Integer volumPrice : monthReport.expense.values()) {
                 sumMonth += volumPrice;
             }
         }
@@ -92,11 +91,11 @@ public class ReportUtil {
     public static int getProfitYear(ArrayList<YearsReports> yearsReports) {
         int meanProfit = 0;
         int i = 0;
-        for(YearsReports yearsReport : yearsReports){
-           for( int value : yearsReport.profit.values()){
-               meanProfit += value;
-               i++;
-           }
+        for (YearsReports yearsReport : yearsReports) {
+            for (int value : yearsReport.profit.values()) {
+                meanProfit += value;
+                i++;
+            }
         }
         meanProfit = meanProfit / i;
         return meanProfit;
@@ -105,8 +104,8 @@ public class ReportUtil {
     public static int getExpenseYear(ArrayList<YearsReports> yearsReports) {
         int meanProfit = 0;
         int i = 0;
-        for(YearsReports yearsReport : yearsReports){
-            for( int value : yearsReport.expense.values()){
+        for (YearsReports yearsReport : yearsReports) {
+            for (int value : yearsReport.expense.values()) {
                 meanProfit += value;
                 i++;
             }

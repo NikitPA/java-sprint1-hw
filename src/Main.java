@@ -11,7 +11,7 @@ public class Main {
             String command = scanner.nextLine();
             switch (command) {
                 case "1":
-                    reportManager.outputMontlyReport();
+                    reportManager.outputMonthlyReport();
                     break;
                 case "2":
                     reportManager.outputYearsReport();

@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MonthReport {
@@ -16,15 +15,15 @@ public class MonthReport {
 
     public HashMap<String, Integer> fillingProfitReportMonth(String[] lines) {
         profit = new HashMap<>();
-            if ("FALSE".equals(lines[1]))
-                profit.put(lines[0], (Integer.valueOf(lines[2]) * Integer.valueOf(lines[3])));
-            return profit;
+        if ("FALSE".equals(lines[1]))
+            profit.put(lines[0], (Integer.valueOf(lines[2]) * Integer.valueOf(lines[3])));
+        return profit;
     }
 
     public HashMap<String, Integer> fillingExpenseReportMonth(String[] lines) {
         expense = new HashMap<>();
-            if ("TRUE".equals(lines[1]))
-                expense.put(lines[0], (Integer.valueOf(lines[2]) * Integer.valueOf(lines[3])));
+        if ("TRUE".equals(lines[1]))
+            expense.put(lines[0], (Integer.valueOf(lines[2]) * Integer.valueOf(lines[3])));
         return expense;
     }
 }
